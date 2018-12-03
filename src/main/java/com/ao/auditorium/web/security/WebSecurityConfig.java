@@ -1,4 +1,4 @@
-package com.ao.auditorium.security;
+package com.ao.auditorium.web.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
