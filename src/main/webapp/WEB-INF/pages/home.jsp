@@ -14,6 +14,7 @@
       </div>
       <div class="container">
         Available courses: ${courses}
+        <p><a href="/my/lecturing-courses/xxx/lectures">Course lectures markup</a></p>
       </div>
     </div>
   </div>
