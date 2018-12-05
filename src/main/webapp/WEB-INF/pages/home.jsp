@@ -13,7 +13,10 @@
         </p>
       </div>
       <div class="container">
-        Available courses: ${courses}
+        Available courses:
+        <c:forEach items="${courses}" var="course">
+        <a href="#">${course.getName()}</a>
+        </c:forEach>
       </div>
     </div>
   </div>

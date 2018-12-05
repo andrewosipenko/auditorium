@@ -21,4 +21,17 @@ public class Course {
         this.name = name;
         this.description = description;
     }
+
+    public String getName(){
+        return  this.name;
+    }
+
+    public String getDescription(){
+        return  this.description;
+    }
+
+    public String getCode(){
+        return  this.code;
+    }
+
 }
