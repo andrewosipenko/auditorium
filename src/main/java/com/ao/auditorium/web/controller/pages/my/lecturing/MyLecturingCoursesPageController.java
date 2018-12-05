@@ -5,10 +5,9 @@ import com.ao.auditorium.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import javax.annotation.Resource;
 
-@Controller
+@Controller()
 public class MyLecturingCoursesPageController {
     @Resource
     private CourseRepository courseRepository;
@@ -18,4 +17,10 @@ public class MyLecturingCoursesPageController {
         model.addAttribute("courses", courseRepository.findAll());
         return WebConstants.Pages.MY_LECTURING_FOLDER+"lecturingCourses";
     }
+
+    @GetMapping("/my/lecturing-courses/")
+    public String createCourses() {
+        return WebConstants.Pages.MY_LECTURING_FOLDER+"lecturingCourse";
+    }
+
 }

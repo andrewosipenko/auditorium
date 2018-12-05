@@ -2,19 +2,21 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<tags:main pageTitle="">
-  <div class="container">
-    <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-        <h1 class="display-4">Welcome!</h1>
-        <p class="lead">
-          Welcome to auditorium online learning platform.
-          Select a course to proceed.
-        </p>
-      </div>
-      <div class="container">
-        Available courses: ${courses}
-      </div>
+<tags:main pageTitle="New course">
+    <div class="container">
+        <form>
+          <div class="form-group">
+            <label for="courseName">Course Name</label>
+            <input type="text" class="form-control" id="courseName" placeholder="Enter course name" required >
+          </div>
+          <div class="form-group">
+            <label for="courseCode">Course Code</label>
+            <input type="text" class="form-control" id="courseCode" placeholder="Enter course code" required>
+          </div>
+          <div class="form-group">
+            <label for="courseDescription">Course Description</label>
+            <textarea class="form-control" id="courseDescription" rows="5"></textarea>
+          </div>
+        </form>
     </div>
-  </div>
 </tags:main>
