@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 
-@Controller("/")
+@Controller
 public class HomePageController {
     @Resource
     private CourseRepository courseRepository;
 
-    @GetMapping
+    @GetMapping("/")
     public String showHome(Model model) {
         model.addAttribute("courses", courseRepository.findAll());
         return WebConstants.Pages.HOME;
