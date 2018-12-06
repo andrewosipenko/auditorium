@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 @Controller()
 public class MyLecturingCoursesPageController {
@@ -19,8 +21,12 @@ public class MyLecturingCoursesPageController {
     private CourseRepository courseRepository;
 
     @GetMapping("/my/lecturing-courses")
-    public String showAllCourses(Model model) {
+    public String showAllCourses(Model model,@RequestParam("status") Optional<String> status) {
         model.addAttribute("courses", courseRepository.findAll());
+        if (status.isPresent())
+            model.addAttribute("status", status.get());
+        else
+            model.addAttribute("status", null);
         return WebConstants.Pages.MY_LECTURING_FOLDER+"lecturingCourses";
     }
 
@@ -50,7 +56,7 @@ public class MyLecturingCoursesPageController {
     }
 
     @PostMapping("/my/lecturing-courses/{courseId}")
-    public RedirectView redirect(@PathVariable Long courseId,@RequestParam("courseName") String code,@RequestParam("courseName") String name,@RequestParam("courseDescription") String description){
+    public RedirectView redirect(@PathVariable Long courseId,RedirectAttributes attributes,@RequestParam("courseName") String code,@RequestParam("courseName") String name,@RequestParam("courseDescription") String description){
         if (courseRepository.findById(courseId).isPresent()) {
             Course course = courseRepository.findById(courseId).get();
             course.setName(name);
@@ -61,13 +67,14 @@ public class MyLecturingCoursesPageController {
             Course newCourse = new Course(code,name,description);
             courseRepository.save(newCourse);
         }
-
+        attributes.addAttribute("status", "success");
         return new RedirectView("/my/lecturing-courses");
     }
 
     @PostMapping("/my/lecturing-courses/{courseId}/delete")
-    public RedirectView redirect(@PathVariable Long courseId){
+    public RedirectView redirect(@PathVariable Long courseId,RedirectAttributes attributes){
         courseRepository.deleteById(courseId);
+        attributes.addAttribute("status", "success");
         return new RedirectView("/my/lecturing-courses");
     }
 
