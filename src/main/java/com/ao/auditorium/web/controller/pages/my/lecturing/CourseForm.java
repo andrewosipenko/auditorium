@@ -1,26 +1,10 @@
-package com.ao.auditorium.model.course;
+package com.ao.auditorium.web.controller.pages.my.lecturing;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public class CourseForm {
 
-@Entity
-public class Course {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
     private String code;
     private String name;
     private String description;
-
-    protected Course(){}
-
-    public Course(String code, String name, String description) {
-        this.code = code;
-        this.name = name;
-        this.description = description;
-    }
 
     public String getName(){
         return  this.name;
@@ -45,5 +29,4 @@ public class Course {
     public void setCode(String code) {
         this.code = code;
     }
-
 }
