@@ -34,4 +34,16 @@ public class Course {
         return  this.code;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
 }
