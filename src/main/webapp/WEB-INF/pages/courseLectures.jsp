@@ -6,7 +6,7 @@
   <div class="container-fluid">
     <div class="row flex-xl-nowrap">
       <div class="col-12 col-md-3 col-xl-3 bd-sidebar">
-        <nav id="navbar-example3" class="navbar navbar-light bg-light">
+        <nav id="navbar-example3" class="navbar navbar-light bg-light sticky-top anyClass">
           <nav class="nav nav-pills flex-column">
             <a class="nav-link" href="#item-1">Lecture 1: Introduction</a>
             <nav class="nav nav-pills flex-column">
