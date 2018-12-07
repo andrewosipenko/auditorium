@@ -10,15 +10,16 @@
     </c:if>
     <div class="container-fluid">
       <div class="list-group">
-      <c:set var = "id" value = "${1}" />
       <c:forEach items="${courses}" var="course">
-        <a href="/my/lecturing-courses/${id}" class="list-group-item list-group-item-action flex-column align-items-start  rounded-0">
+        <a href="/my/lecturing-courses/${course.getId()}" class="list-group-item list-group-item-action flex-column align-items-start  rounded-0">
             <h5 class="mb-1">${course.getName()}</h5>
             <p class="mb-1"><small>${course.getCode()}</small><p>
             <p class="mb-1">${course.getDescription()}</p>
          </a>
-        <c:set var = "id" value = "${id +1}" />
-       </c:forEach>
+      </c:forEach>
+       <a href="/my/lecturing-courses/" class="list-group-item list-group-item-action flex-column align-items-start  rounded-0">
+           <h3 class="mb-1">Add new course</h5>
+        </a>
       </div>
     </div>
 </tags:main>
