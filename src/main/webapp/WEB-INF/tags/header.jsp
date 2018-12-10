@@ -21,7 +21,14 @@
       <li class="nav-item">
         <a class="nav-link" href="#">About</a>
       </li>
-      
+    </ul>
+    <form class="form-inline ml-auto collapse" id="search-form">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+    <ul class="navbar-nav ml-0">
+      <li class="nav-item mr-1">
+        <a class="nav-link" data-toggle="collapse" datatarget="#search-form" href="#search-form"><i class="fas fa-search"></i></a>
+      </li>
       <c:choose>
         <c:when test="${empty pageContext.request.remoteUser}">
           <li class="nav-item">
@@ -36,9 +43,9 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/logout">Logout</a>
-              <%--Workaround. Do not know how to implement logging in as a different user.
-              If you simply logout / login a redirect to github is triggered which picks up
-               SSO cookie and logs the user in without any prompts --%>
+                <%--Workaround. Do not know how to implement logging in as a different user.
+                If you simply logout / login a redirect to github is triggered which picks up
+                 SSO cookie and logs the user in without any prompts --%>
               <a class="dropdown-item" href="#"
                  onclick="alert('To login as a different user \n- logout on github.com site first\n- then do logout and login here')">
                 Login as a different user
@@ -48,9 +55,5 @@
         </c:otherwise>
       </c:choose>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>
