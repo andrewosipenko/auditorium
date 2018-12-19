@@ -6,7 +6,7 @@
   <div class="container-fluid">
     <div class="row flex-xl-nowrap">
       <div class="col-12 col-md-3 col-xl-3 bd-sidebar">
-        <nav class="navbar navbar-light bg-light sticky-top" style="z-index: 900;  max-height: 94vh; overflow-y: auto;">
+        <nav class="navbar navbar-light bg-light sticky-top" style="z-index: 900;  max-height: 100vh; overflow-y: auto;">
           <nav id="navbar-main" class="nav nav-pills flex-column">
             <a id="a-1" class="nav-link" href="#item-1">Lecture 1: Introduction</a>
             <nav id="nav-1"  class="nav nav-pills flex-column">
@@ -56,7 +56,7 @@
 
                     <div id="item-1-2">
                         <div style="float:right; position: relative">
-                            <a id="item-1-2-save" onclick='StopEditing()' href="item-1-2#" style="color: lightblue" hidden>save</a>
+                            <a id="item-1-2-save" onclick='StopEditing()' href="#item-1-2#" style="color: lightblue" hidden>save</a>
                             <a id="item-1-2-edit" onclick='StartEditing("item-1-2")' href="#item-1-2" style="color: lightblue">edit</a>
                             <a href="#item-1-1" style="color: lightblue" onclick='Swap("item-1-1","item-1-2")'>up</a>
                             <a href="#item-1-3" style="color: lightblue" onclick='Swap("item-1-2","item-1-3")'>down</a>
@@ -228,7 +228,32 @@
               'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
               'save table contextmenu directionality  template paste textcolor'
             ],
-            toolbar: " undo redo | bold italic | forecolor backcolor |  codesample | alignleft aligncenter alignright alignjustify | bullist numlist | link image "
+            toolbar: " undo redo | bold italic | forecolor backcolor |  codesample | alignleft aligncenter alignright alignjustify | bullist numlist | link image ",
+            images_upload_handler: function (blobInfo, success, failure){
+                                          var xhr, formData;
+                                          xhr = new XMLHttpRequest();
+                                          xhr.withCredentials = false;
+                                          xhr.open('POST', '/my/lecturing-courses/1/files',true);
+                                          xhr.onload = function() {
+                                            var json;
+
+                                            if (xhr.status < 200 || xhr.status >= 300) {
+                                              failure('HTTP Error: ' + xhr.status);
+                                              return;
+                                            }
+
+                                            json = JSON.parse(xhr.responseText);
+
+                                            if (!json || typeof json.location != 'string') {
+                                              failure('Invalid JSON: ' + xhr.responseText);
+                                              return;
+                                            }
+                                            success(json.location);
+                                          };
+                                          formData = new FormData();
+                                          formData.append('file', blobInfo.blob(), blobInfo.filename());
+                                          xhr.send(formData);
+                                        }
         });
 
         let item = document.getElementById(editingItem+"-save");
