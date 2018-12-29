@@ -38,10 +38,10 @@
         <c:otherwise>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img src="${pageContext.request.userPrincipal.userAuthentication.details.avatar_url}&s=20"/>
+              <img src="${pageContext.request.userPrincipal.userAuthentication.details.avatar_url}&s=20" width="20" height="20"/>
                 ${pageContext.request.remoteUser}
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/logout">Logout</a>
                 <%--Workaround. Do not know how to implement logging in as a different user.
                 If you simply logout / login a redirect to github is triggered which picks up
