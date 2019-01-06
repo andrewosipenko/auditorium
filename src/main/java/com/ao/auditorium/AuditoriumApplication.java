@@ -31,6 +31,7 @@ public class AuditoriumApplication extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/my/**").hasRole("USER")
                 .anyRequest().permitAll()
+
 		.and()
 			.logout()
 			.logoutSuccessUrl("/")
@@ -38,3 +39,4 @@ public class AuditoriumApplication extends WebSecurityConfigurerAdapter {
             .csrf().disable();
 	}
 }
+

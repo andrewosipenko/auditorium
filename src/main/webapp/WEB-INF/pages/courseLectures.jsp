@@ -188,8 +188,65 @@
           </div>
         </div>
       </div>
+      <div class="container">
+            <div class="sticky-top">
+             <button type="button" class="btn btn-info m-3" data-toggle="modal" data-target="#inviteModal">
+               Invite
+             </button>
+            </div>
+      </div>
     </div>
   </div>
+
+
+   <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="inviteModalTitle">Invite Student</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <label for="email" >Email:</label>
+               <input type="email" id="email" name="email"><br>
+               <button class="btn btn-primary" onclick='SendInvite()' data-dismiss="modal">Send invite</button>
+            </div>
+        </div>
+    </div>
+   </div>
+
+   <div class="modal fade" id="inviteFailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="inviteModalTitle">Failed to send invite. Try again?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               <label for="email" >Email:</label>
+               <input type="email" id="email" name="email"><br>
+               <button class="btn btn-primary" onclick='SendInvite()' data-dismiss="modal">Send invite</button>
+            </div>
+        </div>
+    </div>
+   </div>
+
+   <div class="modal fade" id="inviteSendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="inviteModalTitle">Invite successfully send</h5>
+         </div>
+         <div class="modal-body">
+            <button class="btn btn-primary"data-dismiss="modal">Ok</button>
+         </div>
+       </div>
+     </div>
+   </div>
 
    <template>
         <button id="AddItem" class="btn btn-primary mt-3">New item </button>
@@ -422,6 +479,23 @@
         LectureCount--;
       }
 
+      function SendInvite(){
+          var xhr, formData;
+          xhr = new XMLHttpRequest();
+          xhr.withCredentials = false;
+          xhr.open('POST', '/my/lecturing-courses/1/invite',true);
+          xhr.onload = function() {
+            if (xhr.status < 200 || xhr.status >= 300) {
+                $('#inviteFailModal').modal('show')
+            }else{
+                $('#inviteSendModal').modal('show')
+            }
+          };
+          formData = new FormData();
+          var email = document.getElementById("email").value;
+          formData.append('email', email);
+          xhr.send(formData);
+      }
   </script>
 
 </tags:main>
