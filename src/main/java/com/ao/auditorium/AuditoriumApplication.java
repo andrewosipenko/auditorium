@@ -31,6 +31,9 @@ public class AuditoriumApplication extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/my/**").hasRole("USER")
                 .anyRequest().permitAll()
+				.and()
+				.formLogin()
+				.successHandler(new RefererRedirectionAuthenticationSuccessHandler())
 
 		.and()
 			.logout()
