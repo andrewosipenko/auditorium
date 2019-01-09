@@ -16,6 +16,9 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import javax.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 import java.util.UUID;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,28 +84,32 @@ public class StudentController {
             inviteRepository.save(courseInvite);
             sendSimpleMessage(email,course.getName(),course.getDescription(),uuid);
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        }catch (Exception handlerException){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/apply-to-course/{uuid}")
-    public String applying(Model model,@PathVariable UUID uuid) {
-        if (inviteRepository.findByUuid(uuid).isPresent()) {
-            CourseInvite invite = inviteRepository.findByUuid(uuid).get();
+    public String showInvite(Model model, @PathVariable UUID uuid) {
+        Optional<CourseInvite> courseInvite = inviteRepository.findByUuid(uuid);
+        if (courseInvite.isPresent()) {
+            model.addAttribute("courseInvite", courseInvite.get());
+        }
+        return WebConstants.Pages.APPLYING_TO_COURSE;
+    }
+    @GetMapping("/apply-to-course/{uuid}/apply")
+    public String apply(Model model, @PathVariable UUID uuid, RedirectAttributes redirectAttributes) {
+        Optional<CourseInvite> courseInvite = inviteRepository.findByUuid(uuid);
+        if (courseInvite.isPresent()) {
+            CourseInvite invite = courseInvite.get();
             invite.setStatus(2);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (!(authentication instanceof AnonymousAuthenticationToken)) {
-                FillDB(authentication, invite);
-                return WebConstants.Pages.MY_COURSES_FOLDER+Long.toString(invite.getCourse().getId());
-            }else{
-                model.addAttribute("course", invite.getCourse());
-                return WebConstants.Pages.APPLYING_TO_COURSE;
-            }
-        }else{
-            model.addAttribute("courses", courseRepository.findAll());
-            return WebConstants.Pages.HOME;
+            FillDB(authentication, invite);
+            redirectAttributes.addFlashAttribute("message", "You were successfully invited to the course");
+            return "redirect:/" + WebConstants.Pages.MY_COURSES_FOLDER + Long.toString(invite.getCourse().getId());
         }
+        return WebConstants.Pages.APPLYING_TO_COURSE;
     }
 
     private void FillDB(Authentication authentication, CourseInvite invite){
