@@ -30,6 +30,7 @@ public class AuditoriumApplication extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/my/**").hasRole("USER")
+				.antMatchers("/apply-to-course/*/apply").hasRole("USER")
                 .anyRequest().permitAll()
 
 		.and()

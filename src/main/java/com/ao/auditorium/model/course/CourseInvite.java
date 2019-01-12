@@ -74,6 +74,10 @@ public class CourseInvite {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public UUID getUuid() {
+        return uuid;
+    }
 }
 
 
