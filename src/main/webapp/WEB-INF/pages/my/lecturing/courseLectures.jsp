@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<tags:main pageTitle="Lectures">
+<tags:lecturingCourse pageTitle="Lectures" course="${course}" active="lectures">
   <div class="container-fluid">
     <div class="row flex-xl-nowrap">
       <div class="col-12 col-md-3 col-xl-3 bd-sidebar">
@@ -498,5 +498,5 @@
       }
   </script>
 
-</tags:main>
+</tags:lecturingCourse>
 

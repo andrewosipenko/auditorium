@@ -1,4 +1,4 @@
-<%@ attribute name="pageTitle" required="true" %>
+<%@ attribute name="pageTitle" required="true" type="java.lang.String" %>
 <!doctype html>
 <html lang="en">
   <head>
