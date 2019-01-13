@@ -2,6 +2,7 @@ package com.ao.auditorium.web.controller.pages.my.lecturing;
 
 
 import com.ao.auditorium.model.course.*;
+import com.ao.auditorium.model.user.UserService;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+
+import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,8 +38,8 @@ public class StudentController {
     private UserRepository userRepository;
     @javax.annotation.Resource
     private CourseStudentRepository courseStudentRepository;
-
-
+    @Resource
+    private UserService userService;
 
     @Autowired
     public JavaMailSender emailSender;
@@ -107,20 +110,17 @@ public class StudentController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             FillDB(authentication, invite);
             redirectAttributes.addFlashAttribute("message", "You were successfully invited to the course");
-            return "redirect:/" + WebConstants.Pages.MY_COURSES_FOLDER + Long.toString(invite.getCourse().getId());
+            return "redirect:/my/courses/" + Long.toString(invite.getCourse().getId());
         }
         return WebConstants.Pages.APPLYING_TO_COURSE;
     }
 
     private void FillDB(Authentication authentication, CourseInvite invite){
-        HashMap data = (HashMap) ((OAuth2Authentication) authentication).getUserAuthentication().getDetails();
-        String login = data.get("login").toString();
-        if (!userRepository.findByLogin(login).isPresent()){
-            String name = data.get("name").toString();
-            User newUser = new User(login,name,invite.getEmail());
-            userRepository.save(newUser);
+        User user = userService.loadCurrentUser();
+        if (user.getEmail() == null) {
+            user.setEmail(invite.getEmail());
         }
-        User user = userRepository.findByLogin(login).get();
+        userRepository.save(user);
         invite.setUser(user);
         CourseStudent student = new CourseStudent(invite.getCourse(),user);
         courseStudentRepository.save(student);

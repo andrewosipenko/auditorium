@@ -20,10 +20,17 @@ public class CourseStudent {
 
     private String studentSourceRepository;
 
+    public CourseStudent() {
+    }
+
     public CourseStudent(Course course, User student){
         this.course = course;
         this.student = student;
         this.mentor = null;
         this.studentSourceRepository = null;
+    }
+
+    public Course getCourse() {
+        return course;
     }
 }
