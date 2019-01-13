@@ -2,6 +2,12 @@ package com.ao.auditorium.web.controller.pages.my.lecturing;
 
 
 import com.ao.auditorium.model.course.*;
+import com.ao.auditorium.model.student.CourseInvite;
+import com.ao.auditorium.model.student.CourseInviteRepository;
+import com.ao.auditorium.model.student.CourseStudent;
+import com.ao.auditorium.model.student.CourseStudentRepository;
+import com.ao.auditorium.model.user.User;
+import com.ao.auditorium.model.user.UserRepository;
 import com.ao.auditorium.model.user.UserService;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
@@ -21,17 +25,15 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class StudentController {
 
     @javax.annotation.Resource
-    private CourseInviteRepository inviteRepository;
+    private CourseInviteRepository courseInviteRepository;
     @javax.annotation.Resource
     private CourseRepository courseRepository;
     @javax.annotation.Resource
@@ -43,6 +45,15 @@ public class StudentController {
 
     @Autowired
     public JavaMailSender emailSender;
+
+    @GetMapping("/my/lecturing-courses/{courseCode}/students")
+    public String showStudents(@PathVariable String courseCode, Model model) {
+        Course course = courseRepository.findByCode(courseCode).get();
+        List<CourseInvite> invites = courseInviteRepository.findByCourse(course);
+        model.addAttribute("course", course);
+        model.addAttribute("invites", invites);
+        return WebConstants.Pages.COURSE_STUDENTS;
+    }
 
     public void sendSimpleMessage(String to, String course, String description, UUID uuid) throws Exception {
         MimeMessage message = emailSender.createMimeMessage();
@@ -84,7 +95,7 @@ public class StudentController {
             Course course = courseRepository.findById(coursecode).get();
             UUID uuid = UUID.randomUUID();
             CourseInvite courseInvite = new CourseInvite(email,course,uuid);
-            inviteRepository.save(courseInvite);
+            courseInviteRepository.save(courseInvite);
             sendSimpleMessage(email,course.getName(),course.getDescription(),uuid);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (Exception e){
@@ -95,7 +106,7 @@ public class StudentController {
 
     @GetMapping("/apply-to-course/{uuid}")
     public String showInvite(Model model, @PathVariable UUID uuid) {
-        Optional<CourseInvite> courseInvite = inviteRepository.findByUuid(uuid);
+        Optional<CourseInvite> courseInvite = courseInviteRepository.findByUuid(uuid);
         if (courseInvite.isPresent()) {
             model.addAttribute("courseInvite", courseInvite.get());
         }
@@ -103,7 +114,7 @@ public class StudentController {
     }
     @GetMapping("/apply-to-course/{uuid}/apply")
     public String apply(Model model, @PathVariable UUID uuid, RedirectAttributes redirectAttributes) {
-        Optional<CourseInvite> courseInvite = inviteRepository.findByUuid(uuid);
+        Optional<CourseInvite> courseInvite = courseInviteRepository.findByUuid(uuid);
         if (courseInvite.isPresent()) {
             CourseInvite invite = courseInvite.get();
             invite.setStatus(2);
