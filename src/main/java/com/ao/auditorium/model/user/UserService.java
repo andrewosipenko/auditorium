@@ -1,8 +1,5 @@
 package com.ao.auditorium.model.user;
 
-import com.ao.auditorium.model.course.CourseInvite;
-import com.ao.auditorium.model.course.User;
-import com.ao.auditorium.model.course.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
