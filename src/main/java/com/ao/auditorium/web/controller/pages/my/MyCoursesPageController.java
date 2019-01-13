@@ -1,9 +1,9 @@
 package com.ao.auditorium.web.controller.pages.my;
 
 import com.ao.auditorium.model.course.Course;
-import com.ao.auditorium.model.course.CourseStudent;
-import com.ao.auditorium.model.course.CourseStudentRepository;
-import com.ao.auditorium.model.course.User;
+import com.ao.auditorium.model.student.CourseStudent;
+import com.ao.auditorium.model.student.CourseStudentRepository;
+import com.ao.auditorium.model.user.User;
 import com.ao.auditorium.model.user.UserService;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.stereotype.Controller;

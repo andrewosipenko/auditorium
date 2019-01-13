@@ -1,4 +1,4 @@
-package com.ao.auditorium.model.course;
+package com.ao.auditorium.model.student;
 
 import org.springframework.data.repository.CrudRepository;
 import java.util.UUID;

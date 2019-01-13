@@ -1,4 +1,4 @@
-package com.ao.auditorium.model.course;
+package com.ao.auditorium.model.user;
 
 import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
