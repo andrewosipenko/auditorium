@@ -5,6 +5,7 @@ import com.ao.auditorium.model.course.Course;
 import com.ao.auditorium.model.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -23,6 +24,8 @@ public class CourseInvite {
     @JoinColumn(name="user_id")
     private User user;
 
+    private LocalDateTime date;
+
     protected CourseInvite(){}
 
     public CourseInvite(String email, Course course, UUID uuid) {
@@ -31,6 +34,7 @@ public class CourseInvite {
         this.course = course;
         this.status = CourseInviteStatus.NEW;
         this.user = null;
+        this.date = LocalDateTime.now();
     }
 
     public Course getCourse() {
@@ -49,8 +53,20 @@ public class CourseInvite {
         this.user = user;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public CourseInviteStatus getStatus() {
+        return status;
+    }
+
     public UUID getUuid() {
         return uuid;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 }
 
