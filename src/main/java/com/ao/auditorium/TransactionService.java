@@ -1,6 +1,12 @@
 package com.ao.auditorium;
 
 import com.ao.auditorium.model.course.*;
+import com.ao.auditorium.model.student.CourseInvite;
+import com.ao.auditorium.model.student.CourseInviteRepository;
+import com.ao.auditorium.model.student.CourseStudent;
+import com.ao.auditorium.model.student.CourseStudentRepository;
+import com.ao.auditorium.model.user.User;
+import com.ao.auditorium.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
