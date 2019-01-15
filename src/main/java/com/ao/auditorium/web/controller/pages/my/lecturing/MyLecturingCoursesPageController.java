@@ -2,6 +2,7 @@ package com.ao.auditorium.web.controller.pages.my.lecturing;
 
 import com.ao.auditorium.model.course.Course;
 import com.ao.auditorium.model.course.CourseRepository;
+import com.ao.auditorium.model.student.CourseStudentRepository;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import javax.annotation.Resource;
 public class MyLecturingCoursesPageController {
     @Resource
     private CourseRepository courseRepository;
+    @Resource
+    private CourseStudentRepository studentRepository;
 
     @GetMapping("/my/lecturing-courses")
     public String showAllCourses(Model model) {

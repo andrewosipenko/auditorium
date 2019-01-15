@@ -1,5 +1,5 @@
-package com.ao.auditorium.web.controller.pages.my.lecturing;
 
+<<<<<<< HEAD
 
 import com.ao.auditorium.model.course.*;
 import com.ao.auditorium.model.student.CourseInvite;
@@ -137,3 +137,5 @@ public class StudentController {
         courseStudentRepository.save(student);
     }
 }
+=======
+>>>>>>> 61076956cd90997297644944b495ab757232fd0f
