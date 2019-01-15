@@ -75,19 +75,6 @@
   </div>
  </div>
 
- <div class="modal fade" id="inviteSendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-   <div class="modal-dialog modal-dialog-centered" role="document">
-     <div class="modal-content">
-       <div class="modal-header">
-         <h5 class="modal-title" id="inviteModalTitle">Invite successfully send</h5>
-       </div>
-       <div class="modal-body">
-          <button class="btn btn-primary"data-dismiss="modal">Ok</button>
-       </div>
-     </div>
-   </div>
- </div>
-
  <script>
     function SendInvite(){
         var xhr, formData;
@@ -98,7 +85,7 @@
           if (xhr.status < 200 || xhr.status >= 300) {
               $('#inviteFailModal').modal('show')
           }else{
-              $('#inviteSendModal').modal('show')
+              location.reload();
           }
         };
         formData = new FormData();
