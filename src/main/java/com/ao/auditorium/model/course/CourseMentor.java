@@ -6,7 +6,7 @@ import com.ao.auditorium.model.user.User;
 import javax.persistence.*;
 
 @Entity
-class CourseMentor {
+public class CourseMentor {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -15,7 +15,7 @@ class CourseMentor {
     @JoinColumn(name="course_id")
     private Course course;
     @ManyToOne
-    @JoinColumn(name="student_id")
+    @JoinColumn(name="mentor_id")
     private User mentor;
 
     public CourseMentor(){}

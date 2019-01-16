@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
 
-public interface CourseInviteRepository extends CrudRepository<CourseInvite, Long> {
-    Optional<CourseInvite> findByUuid(UUID uuid);
-    List<CourseInvite> findByCourse(Course course);
+public interface StudentCourseInviteRepository extends CrudRepository<StudentCourseInvite, Long> {
+    Optional<StudentCourseInvite> findByUuid(UUID uuid);
+    List<StudentCourseInvite> findByCourse(Course course);
 }

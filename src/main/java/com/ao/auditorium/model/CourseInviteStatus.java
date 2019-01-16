@@ -1,4 +1,4 @@
-package com.ao.auditorium.model.student;
+package com.ao.auditorium.model;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -21,7 +21,7 @@
               <c:choose>
                 <c:when test="${empty pageContext.request.remoteUser}">
                   <p class="lead">
-                    Please click <a href="/apply-to-course/${courseInvite.uuid}/apply" class="btn btn-primary">login and apply</a> to login with your github account to proceed with the course applying.
+                    Please click <a href="/apply-to-course/${courseInvite.uuid}/student/apply" class="btn btn-primary">login and apply</a> to login with your github account to proceed with the course applying.
                   </p>
                   <p class="lead">
                     The github account is required as long as the course contains lots of practical tasks and is highly integrated with github.
@@ -29,7 +29,7 @@
                 </c:when>
                 <c:otherwise>
                   <p class="lead">
-                    Please click <a href="/apply-to-course/${courseInvite.uuid}/apply" class="btn btn-primary">apply</a> to apply to the course.
+                    Please click <a href="/apply-to-course/${courseInvite.uuid}/student/apply" class="btn btn-primary">apply</a> to apply to the course.
                   </p>
                 </c:otherwise>
               </c:choose>

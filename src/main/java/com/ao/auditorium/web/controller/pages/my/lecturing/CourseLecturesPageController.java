@@ -2,7 +2,8 @@ package com.ao.auditorium.web.controller.pages.my.lecturing;
 
 import com.ao.auditorium.model.course.Course;
 import com.ao.auditorium.model.course.CourseRepository;
-import com.ao.auditorium.model.student.CourseInviteRepository;
+import com.ao.auditorium.model.course.MentorCourseInviteRepository;
+import com.ao.auditorium.model.student.StudentCourseInviteRepository;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,9 @@ public class CourseLecturesPageController {
     @Resource
     private CourseRepository courseRepository;
     @Resource
-    private CourseInviteRepository courseInviteRepository;
+    private StudentCourseInviteRepository studentCourseInviteRepository;
+    @Resource
+    private MentorCourseInviteRepository mentorCourseInviteRepository;
 
     @GetMapping("/my/lecturing-courses/{courseCode}/lectures")
     public String showLectures(@PathVariable String courseCode, Model model){
@@ -30,7 +33,7 @@ public class CourseLecturesPageController {
     public String ListStudents(@PathVariable String courseCode, Model model) {
         Course course = courseRepository.findByCode(courseCode).get();
         model.addAttribute("course", course);
-        model.addAttribute("invites", courseInviteRepository.findByCourse(course));
+        model.addAttribute("invites", studentCourseInviteRepository.findByCourse(course));
         return WebConstants.Pages.MY_LECTURING_FOLDER+"courseStudents";
     }
 
@@ -38,6 +41,7 @@ public class CourseLecturesPageController {
     public String ListMentors(@PathVariable String courseCode, Model model) {
         Course course = courseRepository.findByCode(courseCode).get();
         model.addAttribute("course", course);
-        return WebConstants.Pages.MY_LECTURING_FOLDER+"studentList";
+        model.addAttribute("invites", mentorCourseInviteRepository.findByCourse(course));
+        return WebConstants.Pages.MY_LECTURING_FOLDER+"courseMentors";
     }
 }
