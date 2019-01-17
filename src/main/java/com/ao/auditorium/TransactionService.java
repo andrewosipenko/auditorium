@@ -66,7 +66,7 @@ public class TransactionService {
                 "    you are invited to pass "+course+" course.<br>\n" +
                 "    "+description+"<br>\n" +
                 "    Click\n" +
-                "    <a href=\"localhost:8080/apply-to-course/"+uuid+"/student\" >Confirm</a>\n" +
+                "    <a href=\"http://localhost:8080/apply-to-course/"+uuid+"/student\" >Confirm</a>\n" +
                 "     to apply.\n" +
                 "  </body>\n" +
                 "</html>";
@@ -99,7 +99,7 @@ public class TransactionService {
                 "    you are invited to teach "+course+" course.<br>\n" +
                 "    "+description+"<br>\n" +
                 "    Click\n" +
-                "    <a href=\"localhost:8080/apply-to-course/"+uuid+"/mentor\" >Confirm</a>\n" +
+                "    <a href=\"http://localhost:8080/apply-to-course/"+uuid+"/mentor\" >Confirm</a>\n" +
                 "     to apply.\n" +
                 "  </body>\n" +
                 "</html>";
