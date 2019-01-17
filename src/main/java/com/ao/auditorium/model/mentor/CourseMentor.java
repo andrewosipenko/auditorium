@@ -1,6 +1,7 @@
-package com.ao.auditorium.model.course;
+package com.ao.auditorium.model.mentor;
 
 
+import com.ao.auditorium.model.course.Course;
 import com.ao.auditorium.model.user.User;
 
 import javax.persistence.*;

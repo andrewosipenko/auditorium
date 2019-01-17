@@ -1,58 +1,37 @@
 package com.ao.auditorium.web.controller.pages.my.lecturing;
 
-import com.ao.auditorium.TransactionService;
-import com.ao.auditorium.model.course.MentorCourseInvite;
-import com.ao.auditorium.model.course.MentorCourseInviteRepository;
+import com.ao.auditorium.model.mentor.MentorCourseInviteService;
+import com.ao.auditorium.model.mentor.MentorCourseInvite;
+import com.ao.auditorium.model.mentor.MentorCourseInviteRepository;
 import com.ao.auditorium.model.student.StudentCourseInvite;
 import com.ao.auditorium.model.student.StudentCourseInviteRepository;
+import com.ao.auditorium.model.student.StudentCourseInviteService;
 import com.ao.auditorium.web.WebConstants;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.annotation.Resource;
-import java.util.UUID;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
-public class StudentController {
-
+public class ApplyToCoursePageController {
     @Resource
     private StudentCourseInviteRepository studentCourseInviteRepository;
+
     @Resource
     private MentorCourseInviteRepository mentorCourseInviteRepository;
 
-    @Autowired
-    private TransactionService transactionService;
+    @Resource
+    private MentorCourseInviteService mentorCourseInviteService;
 
-    @PostMapping("/my/lecturing-courses/{courseId}/invite-student")
-    @ResponseBody
-    public ResponseEntity<String> sendStudentInvite(@RequestParam("email") String email, @PathVariable Long courseId) {
-        try {
-            transactionService.CreateStudentInvite(email,courseId);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/my/lecturing-courses/{courseId}/invite-mentor")
-    @ResponseBody
-    public ResponseEntity<String> sendMentorInvite(@RequestParam("email") String email, @PathVariable Long courseId) {
-        try {
-            transactionService.CreateMentorInvite(email,courseId);
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+    @Resource
+    private StudentCourseInviteService studentCourseInviteService;
 
     @GetMapping("/apply-to-course/{uuid}/student")
     public String showStudentInvite(Model model, @PathVariable UUID uuid) {
@@ -79,7 +58,7 @@ public class StudentController {
             StudentCourseInvite invite = courseInvite.get();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             try {
-                transactionService.AddStudent(authentication, invite);
+                studentCourseInviteService.AddStudent(authentication, invite);
             }catch (Exception e){
                 return "redirect:/"+WebConstants.Pages.APPLYING_STUDENT;
             }
@@ -96,7 +75,7 @@ public class StudentController {
             MentorCourseInvite invite = courseInvite.get();
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             try {
-                transactionService.AddMentor(authentication, invite);
+                mentorCourseInviteService.AddMentor(authentication, invite);
             }catch (Exception e){
                 return "redirect:/"+WebConstants.Pages.APPLYING_MENTOR;
             }
@@ -105,5 +84,4 @@ public class StudentController {
         }
         return WebConstants.Pages.APPLYING_MENTOR;
     }
-
 }

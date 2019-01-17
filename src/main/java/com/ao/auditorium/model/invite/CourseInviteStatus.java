@@ -1,4 +1,4 @@
-package com.ao.auditorium.model;
+package com.ao.auditorium.model.invite;
 
 import java.util.HashMap;
 import java.util.Map;

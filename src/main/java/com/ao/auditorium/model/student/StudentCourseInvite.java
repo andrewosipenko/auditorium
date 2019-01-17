@@ -1,9 +1,8 @@
 package com.ao.auditorium.model.student;
 
 
-import com.ao.auditorium.model.AbstractCourseInvite;
+import com.ao.auditorium.model.invite.AbstractCourseInvite;
 import com.ao.auditorium.model.course.Course;
-import com.ao.auditorium.model.user.User;
 
 import javax.persistence.*;
 import java.util.UUID;
