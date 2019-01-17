@@ -2,13 +2,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
-<tags:lecturingCourse pageTitle="Students ${course.name}" course="${course}" active="students">
+<tags:lecturingCourse pageTitle="Mentors ${course.name}" course="${course}" active="mentors">
   <div class="container">
-    <h1>Students ${course.name}</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal">Invite student</button>
+    <h1>Mentors ${course.name}</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal">Invite mentor</button>
     <c:choose>
       <c:when test="${empty invites}">
-        <p>No students invited to the course yet</p>
+        <p>No mentors invited to the course yet</p>
       </c:when>
       <c:otherwise>
         <div class="table-responsive">
@@ -26,8 +26,8 @@
             <c:forEach items="${invites}" var="invite">
               <tr>
                 <td>${invite.email}</td>
-                <td>${invite.user.student.name}</td>
-                <td>${invite.user.student.login}</td>
+                <td>${invite.user.mentor.name}</td>
+                <td>${invite.user.mentor.login}</td>
                 <td>${invite.status}</td>
                 <td>${invite.date}</td>
               </tr>
@@ -43,7 +43,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="inviteModalTitle">Invite student</h5>
+            <h5 class="modal-title" id="inviteModalTitle">Invite mentor</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -80,7 +80,7 @@
         var xhr, formData;
         xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
-        xhr.open('POST', '/my/lecturing-courses/${course.id}/invite-student',true);
+        xhr.open('POST', '/my/lecturing-courses/${course.id}/invite-mentor',true);
         xhr.onload = function() {
           if (xhr.status < 200 || xhr.status >= 300) {
               $('#inviteFailModal').modal('show')

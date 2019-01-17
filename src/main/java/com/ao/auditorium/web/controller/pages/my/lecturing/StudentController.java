@@ -1,14 +1,10 @@
 package com.ao.auditorium.web.controller.pages.my.lecturing;
 
-
-import com.ao.auditorium.model.course.*;
-import com.ao.auditorium.model.student.CourseInvite;
-import com.ao.auditorium.model.student.CourseInviteRepository;
-import com.ao.auditorium.model.student.CourseStudent;
-import com.ao.auditorium.model.student.CourseStudentRepository;
-import com.ao.auditorium.model.user.User;
-import com.ao.auditorium.model.user.UserRepository;
-import com.ao.auditorium.model.user.UserService;
+import com.ao.auditorium.TransactionService;
+import com.ao.auditorium.model.course.MentorCourseInvite;
+import com.ao.auditorium.model.course.MentorCourseInviteRepository;
+import com.ao.auditorium.model.student.StudentCourseInvite;
+import com.ao.auditorium.model.student.StudentCourseInviteRepository;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,85 +14,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
-
-import javax.annotation.Resource;
-import javax.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
-import java.util.Optional;
+import javax.annotation.Resource;
 import java.util.UUID;
+import java.util.Optional;
 
 @Controller
 public class StudentController {
 
-    @javax.annotation.Resource
-    private CourseInviteRepository courseInviteRepository;
-    @javax.annotation.Resource
-    private CourseRepository courseRepository;
-    @javax.annotation.Resource
-    private UserRepository userRepository;
-    @javax.annotation.Resource
-    private CourseStudentRepository courseStudentRepository;
     @Resource
-    private UserService userService;
+    private StudentCourseInviteRepository studentCourseInviteRepository;
+    @Resource
+    private MentorCourseInviteRepository mentorCourseInviteRepository;
 
     @Autowired
-    public JavaMailSender emailSender;
+    private TransactionService transactionService;
 
-    @GetMapping("/my/lecturing-courses/{courseCode}/students")
-    public String showStudents(@PathVariable String courseCode, Model model) {
-        Course course = courseRepository.findByCode(courseCode).get();
-        List<CourseInvite> invites = courseInviteRepository.findByCourse(course);
-        model.addAttribute("course", course);
-        model.addAttribute("invites", invites);
-        return WebConstants.Pages.COURSE_STUDENTS;
-    }
-
-    public void sendSimpleMessage(String to, String course, String description, UUID uuid) throws Exception {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setTo(to);
-        helper.setSubject(course+" course invitation");
-        String text = "<html>\n" +
-                "  <head>\n" +
-                "    <style>\n" +
-                "      a {\n" +
-                "            color: #fff !important;\n" +
-                "            text-transform: uppercase;\n" +
-                "            text-decoration: none;\n" +
-                "            background: blue;\n" +
-                "            padding: 5px;\n" +
-                "            border-radius: 5px;\n" +
-                "            border: none;\n" +
-                "          }\n" +
-                "    </style>\n" +
-                "  </head>\n" +
-                "  <body>\n" +
-                "    Dear student,<br>\n" +
-                "    you are invited to pass "+course+" course.<br>\n" +
-                "    "+description+"<br>\n" +
-                "    Click\n" +
-                "    <a href=\"localhost:8080/apply-to-course/"+uuid+"\" >Confirm</a>\n" +
-                "     to apply.\n" +
-                "  </body>\n" +
-                "</html>";
-        helper.setText(text,true);
-        emailSender.send(message);
-    }
-
-    @PostMapping("/my/lecturing-courses/{coursecode}/invite")
+    @PostMapping("/my/lecturing-courses/{courseId}/invite-student")
     @ResponseBody
-    public ResponseEntity<String> sendInvite(@RequestParam("email") String email, @PathVariable Long coursecode) {
+    public ResponseEntity<String> sendStudentInvite(@RequestParam("email") String email, @PathVariable Long courseId) {
         try {
-            Course course = courseRepository.findById(coursecode).get();
-            UUID uuid = UUID.randomUUID();
-            CourseInvite courseInvite = new CourseInvite(email,course,uuid);
-            courseInviteRepository.save(courseInvite);
-            sendSimpleMessage(email,course.getName(),course.getDescription(),uuid);
+            transactionService.CreateStudentInvite(email,courseId);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }catch (Exception e){
             e.printStackTrace();
@@ -104,36 +42,68 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/apply-to-course/{uuid}")
-    public String showInvite(Model model, @PathVariable UUID uuid) {
-        Optional<CourseInvite> courseInvite = courseInviteRepository.findByUuid(uuid);
+    @PostMapping("/my/lecturing-courses/{courseId}/invite-mentor")
+    @ResponseBody
+    public ResponseEntity<String> sendMentorInvite(@RequestParam("email") String email, @PathVariable Long courseId) {
+        try {
+            transactionService.CreateMentorInvite(email,courseId);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/apply-to-course/{uuid}/student")
+    public String showStudentInvite(Model model, @PathVariable UUID uuid) {
+        Optional<StudentCourseInvite> courseInvite = studentCourseInviteRepository.findByUuid(uuid);
         if (courseInvite.isPresent()) {
             model.addAttribute("courseInvite", courseInvite.get());
         }
-        return WebConstants.Pages.APPLYING_TO_COURSE;
-    }
-    @GetMapping("/apply-to-course/{uuid}/apply")
-    public String apply(Model model, @PathVariable UUID uuid, RedirectAttributes redirectAttributes) {
-        Optional<CourseInvite> courseInvite = courseInviteRepository.findByUuid(uuid);
-        if (courseInvite.isPresent()) {
-            CourseInvite invite = courseInvite.get();
-            invite.setStatus(2);
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            FillDB(authentication, invite);
-            redirectAttributes.addFlashAttribute("message", "You were successfully invited to the course");
-            return "redirect:/my/courses/" + Long.toString(invite.getCourse().getId());
-        }
-        return WebConstants.Pages.APPLYING_TO_COURSE;
+        return WebConstants.Pages.APPLYING_STUDENT;
     }
 
-    private void FillDB(Authentication authentication, CourseInvite invite){
-        User user = userService.loadCurrentUser();
-        if (user.getEmail() == null) {
-            user.setEmail(invite.getEmail());
+    @GetMapping("/apply-to-course/{uuid}/mentor")
+    public String showMentorInvite(Model model, @PathVariable UUID uuid) {
+        Optional<MentorCourseInvite> courseInvite = mentorCourseInviteRepository.findByUuid(uuid);
+        if (courseInvite.isPresent()) {
+            model.addAttribute("courseInvite", courseInvite.get());
         }
-        userRepository.save(user);
-        invite.setUser(user);
-        CourseStudent student = new CourseStudent(invite.getCourse(),user);
-        courseStudentRepository.save(student);
+        return WebConstants.Pages.APPLYING_MENTOR;
     }
+
+    @GetMapping("/apply-to-course/{uuid}/student/apply")
+    public String applyStudent(Model model, @PathVariable UUID uuid, RedirectAttributes redirectAttributes) {
+        Optional<StudentCourseInvite> courseInvite = studentCourseInviteRepository.findByUuid(uuid);
+        if (courseInvite.isPresent()) {
+            StudentCourseInvite invite = courseInvite.get();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            try {
+                transactionService.AddStudent(authentication, invite);
+            }catch (Exception e){
+                return "redirect:/"+WebConstants.Pages.APPLYING_STUDENT;
+            }
+            redirectAttributes.addFlashAttribute("message", "You were successfully invited to the course");
+            return "redirect:/" + WebConstants.Pages.MY_COURSES_FOLDER + Long.toString(invite.getCourse().getId());
+        }
+        return WebConstants.Pages.APPLYING_STUDENT;
+    }
+
+    @GetMapping("/apply-to-course/{uuid}/mentor/apply")
+    public String applyMentor(Model model, @PathVariable UUID uuid, RedirectAttributes redirectAttributes) {
+        Optional<MentorCourseInvite> courseInvite = mentorCourseInviteRepository.findByUuid(uuid);
+        if (courseInvite.isPresent()) {
+            MentorCourseInvite invite = courseInvite.get();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            try {
+                transactionService.AddMentor(authentication, invite);
+            }catch (Exception e){
+                return "redirect:/"+WebConstants.Pages.APPLYING_MENTOR;
+            }
+            redirectAttributes.addFlashAttribute("message", "You were successfully invited to the course");
+            return "redirect:/" + WebConstants.Pages.MY_COURSES_FOLDER + Long.toString(invite.getCourse().getId());
+        }
+        return WebConstants.Pages.APPLYING_MENTOR;
+    }
+
 }

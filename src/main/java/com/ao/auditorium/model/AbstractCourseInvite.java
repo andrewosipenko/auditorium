@@ -1,39 +1,34 @@
-package com.ao.auditorium.model.student;
-
+package com.ao.auditorium.model;
 
 import com.ao.auditorium.model.course.Course;
+import com.ao.auditorium.model.CourseInviteStatus;
 import com.ao.auditorium.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 @Entity
-public class CourseInvite {
+public class AbstractCourseInvite {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
-    private UUID  uuid;
-    private String email;
+    Long id;
+    UUID  uuid;
+    String email;
     @ManyToOne
     @JoinColumn(name="course_id")
-    private Course course;
-    private CourseInviteStatus status;
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    Course course;
+    CourseInviteStatus status;
 
-    private LocalDateTime date;
+    LocalDateTime date;
 
-    protected CourseInvite(){}
+    public AbstractCourseInvite(){}
 
-    public CourseInvite(String email, Course course, UUID uuid) {
+    public AbstractCourseInvite(String email, Course course, UUID uuid) {
         this.uuid = uuid;
         this.email = email;
         this.course = course;
         this.status = CourseInviteStatus.NEW;
-        this.user = null;
         this.date = LocalDateTime.now();
     }
 
@@ -49,14 +44,6 @@ public class CourseInvite {
         return email;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
     public CourseInviteStatus getStatus() {
         return status;
     }
@@ -68,6 +55,5 @@ public class CourseInvite {
     public LocalDateTime getDate() {
         return date;
     }
+
 }
-
-
