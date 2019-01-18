@@ -1,6 +1,6 @@
-package com.ao.auditorium.model.course;
+package com.ao.auditorium.model.mentor;
 
-import com.ao.auditorium.model.student.StudentCourseInvite;
+import com.ao.auditorium.model.course.Course;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

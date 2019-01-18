@@ -1,15 +1,13 @@
-package com.ao.auditorium.model;
+package com.ao.auditorium.model.invite;
 
 import com.ao.auditorium.model.course.Course;
-import com.ao.auditorium.model.CourseInviteStatus;
-import com.ao.auditorium.model.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class AbstractCourseInvite {
+public abstract class AbstractCourseInvite {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     Long id;

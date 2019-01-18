@@ -1,9 +1,8 @@
-package com.ao.auditorium.model.course;
+package com.ao.auditorium.model.mentor;
 
 
-import com.ao.auditorium.model.AbstractCourseInvite;
-import com.ao.auditorium.model.student.CourseStudent;
-import com.ao.auditorium.model.user.User;
+import com.ao.auditorium.model.invite.AbstractCourseInvite;
+import com.ao.auditorium.model.course.Course;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

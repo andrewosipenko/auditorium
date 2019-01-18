@@ -2,8 +2,6 @@ package com.ao.auditorium.web.controller.pages.my.lecturing;
 
 import com.ao.auditorium.model.course.Course;
 import com.ao.auditorium.model.course.CourseRepository;
-import com.ao.auditorium.model.course.MentorCourseInviteRepository;
-import com.ao.auditorium.model.student.StudentCourseInviteRepository;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,32 +14,11 @@ import javax.annotation.Resource;
 public class CourseLecturesPageController {
     @Resource
     private CourseRepository courseRepository;
-    @Resource
-    private StudentCourseInviteRepository studentCourseInviteRepository;
-    @Resource
-    private MentorCourseInviteRepository mentorCourseInviteRepository;
 
     @GetMapping("/my/lecturing-courses/{courseCode}/lectures")
     public String showLectures(@PathVariable String courseCode, Model model){
         Course course = courseRepository.findByCode(courseCode).get();
         model.addAttribute("course", course);
         return WebConstants.Pages.COURSE_LECTURES;
-    }
-
-
-    @GetMapping("/my/lecturing-courses/{courseCode}/students")
-    public String ListStudents(@PathVariable String courseCode, Model model) {
-        Course course = courseRepository.findByCode(courseCode).get();
-        model.addAttribute("course", course);
-        model.addAttribute("invites", studentCourseInviteRepository.findByCourse(course));
-        return WebConstants.Pages.MY_LECTURING_FOLDER+"courseStudents";
-    }
-
-    @GetMapping("/my/lecturing-courses/{courseCode}/mentors")
-    public String ListMentors(@PathVariable String courseCode, Model model) {
-        Course course = courseRepository.findByCode(courseCode).get();
-        model.addAttribute("course", course);
-        model.addAttribute("invites", mentorCourseInviteRepository.findByCourse(course));
-        return WebConstants.Pages.MY_LECTURING_FOLDER+"courseMentors";
     }
 }
