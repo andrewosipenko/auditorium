@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 @Controller
 public class BasicCourseInfoPageController {
@@ -25,7 +26,7 @@ public class BasicCourseInfoPageController {
         courseForm.setCode(course.getCode());
         courseForm.setName(course.getName());
         courseForm.setDescription(course.getDescription());
-        model.addAttribute("course", course);
+        model.addAttribute("course", courseRepository.findByCode(courseCode));
         return WebConstants.Pages.MY_LECTURING_FOLDER+"lecturingCourse";
     }
 

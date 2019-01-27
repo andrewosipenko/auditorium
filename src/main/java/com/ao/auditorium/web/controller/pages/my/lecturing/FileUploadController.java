@@ -1,11 +1,8 @@
 package com.ao.auditorium.web.controller.pages.my.lecturing;
 
-import com.ao.auditorium.TransactionService;
-import com.ao.auditorium.model.course.CourseFile;
-import com.ao.auditorium.model.course.CourseFileRepository;
+import com.ao.auditorium.model.course.*;
 import com.ao.auditorium.web.WebConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.annotation.Resource;
 import java.util.Optional;
 import java.io.IOException;
 import java.util.Base64;
@@ -30,11 +28,13 @@ import java.util.Base64;
 @Controller
 public class FileUploadController {
 
-    @javax.annotation.Resource
+    @Resource
     private CourseFileRepository fileRepository;
+    @Resource
+    private CourseRepository courseRepository;
 
-    @Autowired
-    private TransactionService transactionService;
+    @Resource
+    private CourseFileService courseFileService;
 
     @GetMapping("/my/lecturing-courses/{coursecode}/files/{filename}")
     @ResponseBody
@@ -56,7 +56,7 @@ public class FileUploadController {
     @ResponseBody
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file, @PathVariable Long coursecode) {
         try {
-            transactionService.AddFile(file,coursecode);
+            courseFileService.AddFile(file,coursecode);
             String filestring = "/my/lecturing-courses/"+coursecode+"/files/"+file.getOriginalFilename();
             return ResponseEntity.ok("{\"location\":\""+filestring+"\"}");
         }catch (Exception e){
@@ -68,12 +68,21 @@ public class FileUploadController {
     @PostMapping("/my/lecturing-courses/{coursecode}/files/{filename}/delete")
     public RedirectView deleteCourse(@PathVariable String coursecode, @PathVariable String filename, RedirectAttributes attributes){
         try {
-            transactionService.DeleteFile(filename);
+            courseFileService.DeleteFile(filename);
             attributes.addFlashAttribute("status", "success");
         }catch (Exception e){
             e.printStackTrace();
         }
         return new RedirectView("/my/lecturing-courses/{coursecode}/files");
+    }
+
+
+    @GetMapping("/my/lecturing-courses/{courseCode}/files")
+    public String ListFiles(@PathVariable String courseCode, Model model) {
+        Course course = courseRepository.findByCode(courseCode).get();
+        model.addAttribute("course", course);
+        model.addAttribute("files", fileRepository.findByCourse(course));
+        return WebConstants.Pages.COURSE_FILES;
     }
 
 }
