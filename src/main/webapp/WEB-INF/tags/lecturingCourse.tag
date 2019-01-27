@@ -6,7 +6,7 @@
   <div class="container mb-4">
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link ${active == 'basic' ? 'active' : ''}" href="/my/lecturing-courses/${course.id}">Basic</a>
+        <a class="nav-link ${active == 'basic' ? 'active' : ''}" href="/my/lecturing-courses/${course.code}">Basic</a>
       </li>
       <li class="nav-item">
         <a class="nav-link ${active == 'lectures' ? 'active' : ''}" href="/my/lecturing-courses/${course.code}/lectures">Lectures</a>
