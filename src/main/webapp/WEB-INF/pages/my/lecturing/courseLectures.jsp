@@ -232,7 +232,7 @@
                                           var xhr, formData;
                                           xhr = new XMLHttpRequest();
                                           xhr.withCredentials = false;
-                                          xhr.open('POST', '/my/lecturing-courses/1/files',true);
+                                          xhr.open('POST', '/my/lecturing-courses/${course.id}/files',true);
                                           xhr.onload = function() {
                                             var json;
 

@@ -17,6 +17,8 @@ import javax.mail.internet.MimeMessage;
 import javax.annotation.Resource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.UUID;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +38,8 @@ public class TransactionService {
     private CourseStudentRepository courseStudentRepository;
     @Resource
     private CourseMentorRepository courseMentorRepository;
+    @Resource
+    private CourseFileRepository fileRepository;
 
 
     @Autowired
@@ -157,6 +161,18 @@ public class TransactionService {
         CourseMentor mentor = new CourseMentor(invite.getCourse(),user);
         courseMentorRepository.save(mentor);
         invite.setUser(mentor);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void AddFile(MultipartFile file, Long coursecode) throws Exception {
+        Course course = courseRepository.findById(coursecode).get();
+        CourseFile courseFile = new CourseFile(course, file.getBytes(), file.getContentType(), file.getOriginalFilename());
+        fileRepository.save(courseFile);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void DeleteFile(String filename) throws Exception {
+        fileRepository.deleteByName(filename);
     }
 
 

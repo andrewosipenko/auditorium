@@ -1,5 +1,6 @@
 package com.ao.auditorium.web.controller.pages.my.lecturing;
 
+import com.ao.auditorium.TransactionService;
 import com.ao.auditorium.model.course.CourseFile;
 import com.ao.auditorium.model.course.CourseFileRepository;
 import com.ao.auditorium.web.WebConstants;
@@ -20,6 +21,8 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.view.RedirectView;
+
 import java.util.Optional;
 import java.io.IOException;
 import java.util.Base64;
@@ -29,6 +32,9 @@ public class FileUploadController {
 
     @javax.annotation.Resource
     private CourseFileRepository fileRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @GetMapping("/my/lecturing-courses/{coursecode}/files/{filename}")
     @ResponseBody
@@ -50,13 +56,24 @@ public class FileUploadController {
     @ResponseBody
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file, @PathVariable Long coursecode) {
         try {
-            CourseFile courseFile = new CourseFile(coursecode, file.getBytes(), file.getContentType(), file.getOriginalFilename());
-            fileRepository.save(courseFile);
+            transactionService.AddFile(file,coursecode);
             String filestring = "/my/lecturing-courses/"+coursecode+"/files/"+file.getOriginalFilename();
             return ResponseEntity.ok("{\"location\":\""+filestring+"\"}");
-        }catch (Exception handlerException){
+        }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    @PostMapping("/my/lecturing-courses/{coursecode}/files/{filename}/delete")
+    public RedirectView deleteCourse(@PathVariable String coursecode, @PathVariable String filename, RedirectAttributes attributes){
+        try {
+            transactionService.DeleteFile(filename);
+            attributes.addFlashAttribute("status", "success");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new RedirectView("/my/lecturing-courses/{coursecode}/files");
     }
 
 }

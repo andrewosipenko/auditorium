@@ -13,6 +13,7 @@ public interface WebConstants {
         public static final String MY_COURSES = PAGES + "my/myCourses";
         public static final String COURSE_LECTURES = MY_LECTURING_FOLDER + "courseLectures";
         public static final String COURSE_STUDENTS = MY_LECTURING_FOLDER + "courseStudents";
+        public static final String COURSE_FILES = MY_LECTURING_FOLDER + "courseFiles";
     }
     public interface Fragments {
         public static final String FRAGMENTS = "fragments/";

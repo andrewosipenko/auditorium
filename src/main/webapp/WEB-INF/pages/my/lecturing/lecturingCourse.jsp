@@ -23,9 +23,25 @@
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
           <c:if test="${course.isPresent()}">
-            <button type="submit" class="btn btn-danger" onclick='return confirm("Are you sure you want to delete this course?")' form="deleteForm">Delete</button>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
           </c:if>
         </form>
-        <form id="deleteForm" action="/my/lecturing-courses/${courseId}/delete" method="post"></form>
     </div>
+
+     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="inviteModalTitle">Are you sure you want to delete this course?</h5>
+              </div>
+              <div class="modal-body">
+                 <form action="/my/lecturing-courses/${courseId}/delete" method="post">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                      <button type="submit" class="btn btn-danger" >Yes</button>
+                 </form>
+              </div>
+          </div>
+      </div>
+     </div>
+
 </tags:lecturingCourse>
