@@ -26,7 +26,7 @@ public class BasicCourseInfoPageController {
         courseForm.setCode(course.getCode());
         courseForm.setName(course.getName());
         courseForm.setDescription(course.getDescription());
-        model.addAttribute("course", courseRepository.findByCode(courseCode));
+        model.addAttribute("course", course);
         return WebConstants.Pages.MY_LECTURING_FOLDER+"lecturingCourse";
     }
 
