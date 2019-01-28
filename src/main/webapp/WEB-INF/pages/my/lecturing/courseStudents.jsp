@@ -5,7 +5,7 @@
 <tags:lecturingCourse pageTitle="Students ${course.name}" course="${course}" active="students">
   <div class="container">
     <h1>Students ${course.name}</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal">Invite student</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteModal" data-backdrop="false">Invite student</button>
     <c:choose>
       <c:when test="${empty invites}">
         <p>No students invited to the course yet</p>
@@ -57,24 +57,6 @@
   </div>
  </div>
 
- <div class="modal fade" id="inviteFailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="inviteModalTitle">Failed to send invite. Try again?</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-             <label for="email" >Email:</label>
-             <input type="email" id="email" name="email"><br>
-             <button class="btn btn-primary" onclick='SendInvite()' data-dismiss="modal">Send invite</button>
-          </div>
-      </div>
-  </div>
- </div>
-
  <script>
     function SendInvite(){
         var xhr, formData;
@@ -83,7 +65,11 @@
         xhr.open('POST', '/my/lecturing-courses/${course.id}/invite-student',true);
         xhr.onload = function() {
           if (xhr.status < 200 || xhr.status >= 300) {
-              $('#inviteFailModal').modal('show')
+            $('#inviteModal').modal('dispose');
+            document.getElementById("inviteModalTitle").innerHTML = "Failed to send invite. Try again?";
+            $('#inviteModal').modal({
+              backdrop: false
+            });
           }else{
               location.reload();
           }

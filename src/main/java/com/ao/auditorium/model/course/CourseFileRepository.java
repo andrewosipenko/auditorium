@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.core.io.Resource;
 
 public interface CourseFileRepository extends CrudRepository<CourseFile, Long> {
-    Optional<CourseFile> findByCourse(Long course);
+    List<CourseFile> findByCourse(Course course);
     Optional<CourseFile> findByName(String name);
+    void deleteByName(String name);
 }

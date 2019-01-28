@@ -17,6 +17,9 @@
       <li class="nav-item">
         <a class="nav-link ${active == 'mentors' ? 'active' : ''}" href="/my/lecturing-courses/${course.code}/mentors">Mentors</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link ${active == 'files' ? 'active' : ''}" href="/my/lecturing-courses/${course.code}/files">Files</a>
+      </li>
     </ul>
   </div>
   <jsp:doBody/>
